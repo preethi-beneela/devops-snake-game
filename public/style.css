@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+body{background:#0f0f18;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;color:#fff;font-family:Orbitron,monospace}
+.wrap{text-align:center}
+h1{color:#7afcff;margin-bottom:10px;text-shadow:0 0 8px #7afcff}
+#gameContainer{background:linear-gradient(180deg,#071029,#0b1020);padding:12px;border-radius:12px;box-shadow:0 0 30px rgba(58,204,255,0.08)}
+#gameCanvas{background:repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0 20px, rgba(255,255,255,0.00) 20px 40px);border:3px solid rgba(122,252,255,0.08);border-radius:8px;display:block;margin:0 auto}
+#hud{display:flex;align-items:center;gap:20px;justify-content:center;margin-top:12px}
+button{background:radial-gradient(circle at 30% 30%,#00fff0,#0084ff);border:none;padding:10px 20px;border-radius:8px;color:#001820;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(0,140,255,0.2);transform:translateZ(0);transition:transform .15s ease}
+button:hover{transform:translateY(-4px) scale(1.02)}
+#score{font-size:18px;color:#7afcff;text-shadow:0 0 6px rgba(122,252,255,0.2)}

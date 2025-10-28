@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mini-game-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mini-game
+  template:
+    metadata:
+      labels:
+        app: mini-game
+    spec:
+      containers:
+      - name: mini-game
+        image: <ACR_LOGIN_SERVER>/mini-game:latest
+        ports:
+        - containerPort: 3000

@@ -1,0 +1,11 @@
+- name: Deploy k8s manifests to cluster
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Apply k8s manifests
+      community.kubernetes.k8s:
+        state: present
+        src: "{{ item }}"
+      loop:
+        - ../k8s/deployment.yaml
+        - ../k8s/service.yaml
