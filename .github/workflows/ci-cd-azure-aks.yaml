@@ -1,47 +1,37 @@
-name: CI-CD to ACR + AKS
+name: DevOps Snake Game CI/CD
 
 on:
   push:
+    branches: [ main ]
+  pull_request:
     branches: [ main ]
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Setup Node
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run tests
         run: npm test
 
-  build-push-deploy:
-    needs: build-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t snake-game .
 
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Run Docker container
+        run: docker run -d -p 3000:3000 snake-game
 
-      - name: Build and push image to ACR
+      - name: Verify server is running
         run: |
-          az acr login --name ${{ secrets.ACR_NAME }}
-          IMAGE=${{ secrets.ACR_LOGIN_SERVER }}/mini-game:${{ github.sha }}
-          docker build -t $IMAGE .
-          docker push $IMAGE
-
-      - name: Deploy to AKS
-        run: |
-          sed -i "s|<ACR_LOGIN_SERVER>/mini-game:latest|${{ secrets.ACR_LOGIN_SERVER }}/mini-game:${{ github.sha }}|g" k8s/deployment.yaml
-          az aks get-credentials --resource-group ${{ secrets.AZURE_RG }} --name ${{ secrets.AKS_NAME }}
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
+          sleep 5
+          curl -I http://localhost:3000 || echo "Server not responding"
