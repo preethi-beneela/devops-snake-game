@@ -23,7 +23,8 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npx jest --runInBand
+
 
       - name: Build Docker image
         run: docker build -t snake-game .
