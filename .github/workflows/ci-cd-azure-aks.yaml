@@ -9,11 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
-        with: node-version: 18
+        with:
+          node-version: 18
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run tests
         run: npm test
 
@@ -22,16 +26,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Build and push image to ACR
         run: |
           az acr login --name ${{ secrets.ACR_NAME }}
           IMAGE=${{ secrets.ACR_LOGIN_SERVER }}/mini-game:${{ github.sha }}
           docker build -t $IMAGE .
           docker push $IMAGE
+
       - name: Deploy to AKS
         run: |
           sed -i "s|<ACR_LOGIN_SERVER>/mini-game:latest|${{ secrets.ACR_LOGIN_SERVER }}/mini-game:${{ github.sha }}|g" k8s/deployment.yaml
